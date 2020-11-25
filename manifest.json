@@ -1,0 +1,20 @@
+{
+  "version": "0.1", 
+  "manifest_version": 2,
+  "name": "Meet Toggle Receive Video", 
+  "description": "Button to toggle input video",  
+  "author": "Neville Omangi",
+  "browser_action": {
+    "default_icon": { "26": "video.png" },
+    "default_title": "Disable video"
+  },
+  "content_scripts": [{
+    "matches": [ "https://meet.google.com/*" ],
+    "js": ["script.js"]
+  }],
+  "background": {
+    "scripts": [ "background.js" ],
+    "persistent": true
+  },
+  "permissions": [ "debugger", "tabs" ]
+}
