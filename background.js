@@ -18,6 +18,7 @@ const onDisabled = tab => {
 }
 
 const onClickResponse = tab => {
+  attachedTabs[tab.tabId]?.clickSendResponse?.({ data: true })
   chrome.debugger.sendCommand(tab, 'Debugger.disable', {}, onDisabled.bind(null, tab))
 }
 
@@ -32,8 +33,7 @@ const onAttach = tab => {
   }
 
   console.info(`${tab.tabId} attached`)
-  toggleIcon(tab)
-  attachedTabs[tab.tabId] = true
+  attachedTabs[tab.tabId] = {}
   chrome.debugger.sendCommand(tab, 'Debugger.enable', {}, onEnabled.bind(null, tab))
 }
 
@@ -59,14 +59,14 @@ const onActionClick = tab => {
   const tabSig = { tabId: tab.id }
   if (!tab.url.includes('meet.google.com')) return
   if (!attachedTabs[tabSig.tabId]) chrome.debugger.attach({ ...tabSig }, VERSION, onAttach.bind(null, { ...tabSig }))
-  chrome.tabs.sendMessage(tabSig.tabId, 'toggle-video', response => {
-    // toggle-video response
-  })
+  chrome.tabs.sendMessage(tabSig.tabId, { command: 'toggle-video' })
 }
 
 const onMessage = (request, sender, sendResponse) => {
   if (request.command != 'click-settings') return
   dispatchClick({ tabId: sender.tab.id }, request.coords)
+  if (attachedTabs[sender.tab.id]) attachedTabs[sender.tab.id].clickSendResponse = sendResponse
+
   return true
 }
 
