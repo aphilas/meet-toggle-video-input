@@ -5,7 +5,7 @@
   "description": "Button to toggle input video",  
   "author": "Neville Omangi",
   "browser_action": {
-    "default_icon": { "26": "video.png" },
+    "default_icon": { "26": "icons/video.png" },
     "default_title": "Disable video"
   },
   "content_scripts": [{
